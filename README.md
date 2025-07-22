@@ -17,6 +17,8 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
 To run the ansible playbook, which checks the versions locally, simply run `task run` in the root directory of this repository.
 
+The playbook prints the version information to the console and writes it to a Markdown file in the `components/ansible` directory.
+
 ```ditaa
             +--------------------+
             |    GitHub API      |
@@ -49,7 +51,7 @@ To run the ansible playbook, which checks the versions locally, simply run `task
 |    |                                           v               |    |
 |    |                             +-------------+----------+    |    |
 |    |                             |     AI Summarizer      |    |    |
-|    |                             |  (Parse + Summarizes)  |    |    |
+|    |                             |  (Parse + summarize)   |    |    |
 |    |                             +------------------------+    |    |
 |    |                                                           |    |
 |    +-----------------------------------------------------------+    |
