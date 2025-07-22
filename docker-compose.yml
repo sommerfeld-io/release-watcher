@@ -53,13 +53,6 @@ services:
     command: --config .lychee.toml .
     tty: *tty
 
-  lint-ansible:
-    image: pipelinecomponents/ansible-lint:0.76.0
-    volumes: *volumes
-    working_dir: *default-workdir
-    command: ansible-lint components/ansible -c .ansible-lint.yml
-    tty: *tty
-
   hadolint-devcontainer:
     image: &lint-dockerfile-image hadolint/hadolint:latest
     volumes: *volumes

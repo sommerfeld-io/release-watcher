@@ -36,7 +36,6 @@ tasks:
       - rm -rf .cache
       - rm -rf node_modules
       - rm -rf target
-      - rm components/ansible/previous.md
       - find . -type f -exec chmod +r {} +
 
   # ===============================================================================================
@@ -44,17 +43,13 @@ tasks:
   lint:
     desc: Run all project linters (except Dockerfile linters)
     cmds:
-      - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links', 'ansible']
+      - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
       - docker compose up hadolint-devcontainer --exit-code-from hadolint-devcontainer
 
   # ===============================================================================================
 
-  run:
-    vars:
-      PLAYBOOK: playbook.yml
-    desc: Run the release-watcher Ansible playbook
-    dir: components/ansible
+  run:release-watcher:
+    desc: Run the "run" task from components/taskfile.yml
     cmds:
-      - gh auth status || gh auth login
-      - ansible-playbook "{{ .PLAYBOOK }}"
+      - task -t components/taskfile.yml run

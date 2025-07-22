@@ -1,7 +1,0 @@
----
-github: https://github.com
-github_api: https://api.github.com
-
-repositories:
-  - { org: "argoproj", repo: "argo-cd" }
-  - { org: "argoproj-labs", repo: "argocd-autopilot" }

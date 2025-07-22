@@ -14,9 +14,8 @@
 
 		".vscode",
 
-		"components/ansible",
-        "components/ansible/tasks",
-        "components/ansible/vars",
+		"components",
+        "components/work",
 
         "node_modules/**",
 		"public/**",

@@ -14,6 +14,10 @@ ls:
   .toml: kebab-case
   .feature: kebab-case
 
+  .md.j2: kebab-case
+  .yml.j2: kebab-case
+  .yaml.j2: kebab-case
+
   .java: PascalCase
   .kt: PascalCase
   .sh: kebab-case
@@ -44,11 +48,9 @@ ignore:
   - target
 
   - .task
-  - tests/inspec/ansible-baseline/vendor
   - components/talos-cluster/helm-charts/hello-world-nginx/Chart.yaml
 
   # linter definitions etc.
-  - .ansible-lint.yml
   - .editorconfig
   - .hadolint.yml
   - .kube-linter.yml

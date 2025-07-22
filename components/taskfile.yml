@@ -1,0 +1,117 @@
+---
+version: '3.42.1'
+
+vars:
+  # LOG_INFO: "[INFO]"
+  LOG_DONE: "[\e[32mDONE\e[0m]"
+  LOG_ERROR: "[\e[31mERROR\e[0m]"
+  LOG_INFO: "[\e[34mINFO\e[0m]"
+  LOG_WARN: "[\e[93mWARN\e[0m]"
+  Y: "\e[93m"
+  P: "\e[35m"
+  D: "\e[0m"
+  G: "\e[0;32m"
+  R: "\e[0;31m"
+  GREY: "\e[30m"
+  B: "\e[34m"
+
+  REPOSITORIES: [
+    "argoproj/argo-cd",
+    "argoproj-labs/argocd-autopilot",
+    "sommerfeld-io/release-watcher",
+  ]
+  TARGET_DIR: "work"
+  TARGET: "{{ .TARGET_DIR }}/versions.md"
+  PREVIOUS: "{{ .TARGET_DIR }}/previous-versions.md"
+  TEMPLATE: template.md
+
+tasks:
+
+  internal:login:
+    desc: Run all login tasks
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} GitHub CLI login"
+      - gh auth status || gh auth login
+    silent: true
+
+  internal:pre:
+    desc: Set of task to run as preparation before the main tasks
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} Preparing target directory"
+      - mkdir -p {{ .TARGET_DIR }}
+      - cp {{ .TARGET }} {{ .PREVIOUS }} || cp {{ .TEMPLATE }} {{ .PREVIOUS }}
+      - cp {{ .TEMPLATE }} {{ .TARGET }}
+    silent: true
+
+  internal:post:
+    desc: Set of task to run after the main tasks
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} Writing footer"
+      - echo "" >> {{ .TARGET }}
+      - echo -e "File was generated on $(date +"%Y-%m-%d %H:%M:%S %Z")" >> {{ .TARGET }}
+    silent: true
+
+  internal:cleanup:
+    desc: Set of tasks to clean up at the very end
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} Cleaning up"
+      - rm {{ .PREVIOUS }}
+    silent: true
+
+  internal:query-github-releases-api:*:
+    desc: Check GitHub releases for defined repositories
+    internal: true
+    vars:
+      REPO: '{{ index .MATCH 0 }}'
+    cmds:
+      - echo "{{ .LOG_INFO }} Checking repository {{ .P }}{{ .REPO }}{{ .D }} for new versions"
+      - |
+        RELEASE_JSON=$(gh api repos/{{ .REPO }}/releases/latest)
+
+        TAG_NAME="$(echo "$RELEASE_JSON" | jq -r '.tag_name')"
+        URL="$(echo "$RELEASE_JSON" | jq -r '.html_url')"
+        PUBLISHED_AT="$(echo "$RELEASE_JSON" | jq -r '.published_at')"
+        PUBLISHED_FORMATTED="$(echo "$PUBLISHED_AT" | cut -d'T' -f1)"
+
+        echo -e "{{ .LOG_INFO }} {{ .GREY }}    Latest release = $TAG_NAME{{ .D }}"
+        echo -e "{{ .LOG_INFO }} {{ .GREY }}      Published at = $PUBLISHED_FORMATTED{{ .D }}"
+        echo -e "{{ .LOG_INFO }} {{ .GREY }}       Release URL = $URL{{ .D }}"
+
+        echo "| [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
+    silent: true
+
+  internal:compare:
+    desc: Compare current and previous versions files
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} Comparing versions for all repositories"
+      - echo
+      - echo
+      - >
+          diff -u --color \
+            --label "Previous Versions ({{ .R }}red{{ .D }})" \
+            --label "Current Versions ({{ .G }}green{{ .D }})" \
+            {{ .PREVIOUS }} {{ .TARGET }} || true
+      - echo
+      - echo
+    silent: true
+
+  run:
+    desc: Check GitHub releases for new updates
+    summary: >
+      Check if new releases are available for the defined repositories
+      compared to the last time you ran the task.
+    cmds:
+      - task: internal:login
+      - task: internal:pre
+      - for:
+          var: REPOSITORIES
+        task: internal:query-github-releases-api:{{ .ITEM }}
+      - task: internal:post
+      - task: internal:compare
+      - task: internal:cleanup
+    silent: true
