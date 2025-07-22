@@ -1,0 +1,132 @@
+---
+name: "Pipeline: Commit + Test"
+
+on:
+  push:
+    branches-ignore:
+      - dependabot/**
+    paths-ignore:
+      - '**.adoc'
+      - '**.md'
+      - 'docs/**'
+      - '.devcontainer/**'
+      - '.github/workflows/dev-environment.yml'
+      - '.vscode/**'
+      - '.gitkeep'
+  schedule:
+    - cron: '0 1 * * 2'
+
+env:
+  REGISTRY: docker.io
+
+permissions:
+  contents: read
+
+jobs:
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          ignore_paths: node_modules target
+
+  lint:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.linter }}
+    strategy:
+      matrix:
+        linter: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links', 'ansible', 'helm', 'k8s-manifests']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Run lint-${{ matrix.linter }} from docker-compose.yml
+        env:
+          LINTER: ${{ matrix.linter }}
+        run: docker compose up "lint-$LINTER" --exit-code-from "lint-$LINTER"
+        shell: bash
+
+  files-should-exist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Mandatory files should exist
+        uses: chrisreddington/validate-file-exists@v0.0.7
+        with:
+          required-files: >
+            .editorconfig,
+            .gitignore,
+            taskfile.yml,
+            .github/dependabot.yml,
+            .task/.gitkeep,
+            .vscode/settings.json
+
+  # ----- Release stage ---------------------------------------------------------------------------
+
+  release-code:
+    runs-on: ubuntu-latest
+    needs: [
+      'lint',
+      'shellcheck',
+      'files-should-exist',
+    ]
+    if: ${{ (github.actor != 'dependabot[bot]') && (github.ref == 'refs/heads/main') }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{github.ref}}
+      - name: Info - package.json
+        run: cat package.json
+        shell: bash
+      - name: Install Node.js
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: 22.2.0
+      - name: semantic-release - Install
+        run: |
+          npm install --save-dev semantic-release
+          npm install --save-dev @semantic-release/commit-analyzer
+          npm install --save-dev @semantic-release/release-notes-generator
+          npm install --save-dev @semantic-release/npm
+          npm install --save-dev @semantic-release/exec
+          npm install --save-dev @semantic-release/git
+          npm install --save-dev @semantic-release/github
+        shell: bash
+      - name: semantic-release - Run
+        id: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_REPO_AND_PROJECT }}
+        run: npx semantic-release
+        shell: bash
+      - name: Info - package.json
+        run: cat package.json
+        shell: bash
+      - name: Get the latest git tag (freshly created by semantic-release)
+        id: get-version
+        run: |
+          # Get the latest tag and strip the 'v' prefix if present
+          VERSION="$(git describe --tags --abbrev=0 | sed 's/^v//')"
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+        shell: bash
+      - name: Get the latest git tag (freshly created by semantic-release)
+        run: echo "freshly created tag ${{ steps.get-version.outputs.VERSION }}"
+        shell: bash
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          author_name: sebastian
+          author_email: sebastian@sommerfeld.io
+          message: "refactor(release): bump version to ${{ steps.get-version.outputs.VERSION }} [Actions Bot]"

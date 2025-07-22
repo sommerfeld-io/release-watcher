@@ -1,0 +1,60 @@
+---
+ls:
+  .adoc: kebab-case | SCREAMING_SNAKE_CASE | PascalCase
+  .puml: kebab-case
+  .md: kebab-case | SCREAMING_SNAKE_CASE
+
+  .conf: kebab-case
+  .go: snake_case
+  .json: kebab-case
+  .rb: kebab-case
+  .tf: kebab-case
+  .yml: kebab-case
+  .yaml: kebab-case
+  .toml: kebab-case
+  .feature: kebab-case
+
+  .java: PascalCase
+  .kt: PascalCase
+  .sh: kebab-case
+
+  .css: kebab-case
+  .html: kebab-case
+  .js: kebab-case
+  .hbs: kebab-case
+  .svg: kebab-case
+
+  Dockerfile: PascalCase
+  Vagrantfile: PascalCase
+
+  .babelrc: lowercase
+  .env: lowercase
+  .dockerignore: lowercase
+  .folderslintrc: lowercase
+  .gitignore: lowercase
+  .gitkeep: lowercase
+  .shellcheckrc: lowercase
+
+ignore:
+  # commons
+  - .git
+  - .idea
+  - .vscode
+  - node_modules
+  - target
+
+  - .task
+  - tests/inspec/ansible-baseline/vendor
+  - components/talos-cluster/helm-charts/hello-world-nginx/Chart.yaml
+
+  # linter definitions etc.
+  - .ansible-lint.yml
+  - .editorconfig
+  - .hadolint.yml
+  - .kube-linter.yml
+  - .ls-lint.yml
+  - .lychee.toml
+  - .markdownlint.yml
+  - .yamllint.yml
+  - .pre-commit-config.yaml
+  - .releaserc.js

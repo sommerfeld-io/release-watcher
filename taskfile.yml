@@ -1,0 +1,57 @@
+---
+version: '3.42.1'
+
+dotenv: ['.env']
+
+vars:
+  INSPEC_DIR: tests/inspec
+  REPO: https://raw.githubusercontent.com/sommerfeld-io/.github
+
+includes:
+  common: https://raw.githubusercontent.com/sommerfeld-io/.github/refs/heads/main/assets/task/common.yml
+
+tasks:
+
+  sync:assets-from-github:
+    desc: 'Sync assets from the central sommerfeldio/.github repository'
+    cmds:
+      - echo "Syncing assets from the central sommerfeldio/.github repository..."
+      - task: common:download
+        vars: { DEST: ".github/copilot-instructions.md", URL: "{{ .REPO }}/refs/heads/main/.github/copilot-instructions.md" }
+      - task: common:download
+        vars: { DEST: ".vscode/settings.json", URL: "{{ .REPO }}/refs/heads/main/.vscode/settings.json" }
+      - task: common:download
+        vars: { DEST: ".github/workflows/codeql.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/codeql.yml" }
+      - task: common:download
+        vars: { DEST: ".github/workflows/housekeeping-issues.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/housekeeping-issues.yml" }
+      - task: common:download
+        vars: { DEST: ".github/workflows/housekeeping-labels.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/housekeeping-labels.yml" }
+
+  # ===============================================================================================
+
+  cleanup:
+    desc: Cleanup the development environment for this project
+    cmds:
+      - docker compose down --remove-orphans
+      - rm -rf .cache
+      - rm -rf node_modules
+      - rm -rf target
+      - find . -type f -exec chmod +r {} +
+
+  # ===============================================================================================
+
+  lint:
+    desc: Run all project linters (except Dockerfile linters)
+    cmds:
+      - for: ['yaml', 'filenames', 'folders', 'ansible'] #'workflows', 'markdown-links',
+        cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
+
+  # ===============================================================================================
+
+  run:
+    vars:
+      PLAYBOOK: versions.yml
+    desc: &ansible-desc Check versions
+    dir: &ansible-dir components/ansible
+    cmds: &ansible-cmd
+      - ansible-playbook "playbooks/{{ .PLAYBOOK }}" --inventory hosts.yml --ask-become-pass

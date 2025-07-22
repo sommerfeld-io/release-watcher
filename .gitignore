@@ -1,0 +1,16 @@
+.cache
+.idea
+target
+.target
+*.log
+*.lock
+yamllint-*
+
+.vagrant
+node_modules
+/node_modules/
+/public
+/target
+/dist
+
+.task/remote

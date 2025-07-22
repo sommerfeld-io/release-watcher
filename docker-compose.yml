@@ -1,0 +1,59 @@
+---
+x-volumes: &volumes
+  - /etc/timezone:/etc/timezone:ro
+  - /etc/localtime:/etc/localtime:ro
+  - project-root-volume:/workspaces/release-watcher
+x-workdir: &default-workdir /workspaces/release-watcher
+x-tty: &tty true
+
+volumes:
+
+  project-root-volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: .
+      o: bind
+
+services:
+
+  lint-yaml:
+    image: cytopia/yamllint:latest
+    volumes: *volumes
+    working_dir: *default-workdir
+    command: .
+    tty: *tty
+
+  lint-workflows:
+    image: rhysd/actionlint:latest
+    volumes: *volumes
+    working_dir: *default-workdir
+    command: -color
+    tty: *tty
+
+  lint-filenames:
+    image: lslintorg/ls-lint:1.11.2
+    volumes: *volumes
+    working_dir: *default-workdir
+    tty: *tty
+
+  lint-folders:
+    image: sommerfeldio/folderslint:latest
+    volumes: *volumes
+    working_dir: *default-workdir
+    command: .
+    tty: *tty
+
+  lint-markdown-links:
+    image: lycheeverse/lychee:sha-a11d515-alpine
+    volumes: *volumes
+    working_dir: *default-workdir
+    command: --config .lychee.toml .
+    tty: *tty
+
+  lint-ansible:
+    image: pipelinecomponents/ansible-lint:0.76.0
+    volumes: *volumes
+    working_dir: *default-workdir
+    command: ansible-lint components/ansible/playbooks -c .ansible-lint.yml
+    tty: *tty

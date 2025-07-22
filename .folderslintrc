@@ -1,0 +1,23 @@
+{
+	"rules": [
+		".devcontainer",
+		".devcontainer/ops",
+		".devcontainer/ops/assets",
+
+		".github",
+		".github/workflows",
+		".github/workflows/assets",
+
+        ".task/**",
+
+		".vscode",
+
+		"components/ansible/playbooks",
+        "components/ansible/tasks",
+        "components/ansible/vars",
+
+        "node_modules/**",
+		"public/**",
+		"target/**"
+	]
+}
