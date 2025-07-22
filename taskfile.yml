@@ -50,8 +50,9 @@ tasks:
 
   run:
     vars:
-      PLAYBOOK: versions.yml
-    desc: &ansible-desc Check versions
-    dir: &ansible-dir components/ansible
-    cmds: &ansible-cmd
-      - ansible-playbook "playbooks/{{ .PLAYBOOK }}" --inventory hosts.yml --ask-become-pass
+      PLAYBOOK: release-watcher.yml
+    desc: Run the release-watcher Ansible playbook
+    dir: components/ansible
+    cmds:
+      - gh auth status || gh auth login
+      - ansible-playbook "playbooks/{{ .PLAYBOOK }}"
