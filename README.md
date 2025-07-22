@@ -17,54 +17,38 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 todo ... how to run locally ... (which command to run and the info about the gh auth login)
 
 ```ditaa
-       +--------------------+
-       |    GitHub API      |
-       | (Release Info)     |
-       +---------+----------+
-                 ^
-                 |
-+----------------+----------------+      +-------------------------+
-|     Ansible Playbook (local)    +---- >+    Console Output       |
-| (fetches data from GitHub API)  |      |  (Prints release info)  |
-+---------------------------------+      +-------------+-----------+
-                                                       |
-                                                       v
-                                         +-------------+-----------+
-                                         |     AI Summarizer       |
-                                         |  (Parses + Summarizes)  |
-                                         +-------------------------+
+            +--------------------+
+            |    GitHub API      |
+            | (Release Info)     |
+            +---------+----------+
+                      ^
+                      |
++---------------------|-----------------------------------------------+
+|                     |                                 taskfile.yml  |
+|    +-----------+    |                                               |
+|    |  gh auth  |    |                                               |
+|    |   login   |    |                                               |
+|    +-----+-----+    |                                               |
+|          |          |                                               |
+|          v          |                                               |
+|    +-----+----------|------------------------------------------+    |
+|    |                |                        Ansible Playbook  |    |
+|    |                |                                          |    |
+|    |  +-------------+-----+      +------------------------+    |    |
+|    |  |  Fetch data       +----->+    Console Output      |    |    |
+|    |  |  from GitHub API  |      |  (Print release info)  |    |    |
+|    |  +-------------------+      +-------------+----------+    |    |
+|    |                                           |               |    |
+|    |                                           v               |    |
+|    |                             +-------------+----------+    |    |
+|    |                             |     AI Summarizer      |    |    |
+|    |                             |  (Parse + Summarizes)  |    |    |
+|    |                             +------------------------+    |    |
+|    |                                                           |    |
+|    +-----------------------------------------------------------+    |
+|                                                                     |
++---------------------------------------------------------------------+
 ```
-
-<!-- ## How to run the playbook in a GitHub Actions Workflow
-
-todo ... summary ...
-
-```ditaa
-       +--------------------+
-       |    GitHub API      |
-       | (Release Info)     |
-       +---------+----------+
-                 ^
-                 |
-+----------------+----------------+      +-------------------------+
-|     Ansible Playbook            +---- >+    Console Output       |
-| (fetches data from GitHub API)  |      |  (Prints release info)  |
-+---------------------------------+      +-------------+-----------+
-                                                       |
-                                                       v
-                                         +-------------+-----------+
-                                         |     AI Summarizer       |
-                                         |  (Parses + Summarizes)  |
-                                         +-------------+-----------+
-                                                       |
-                                                       v
-                                            +----------+-----------+
-                                            |   Google Chat Bot    |
-                                            | (Sends update msg)   |
-                                            +----------------------+
-```
-
-todo ... sample workflow.yml ... -->
 
 ## Risks and Technical Debts
 
