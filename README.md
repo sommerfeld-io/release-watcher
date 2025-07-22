@@ -66,7 +66,9 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
 ## :zap: Baseline for Version Comparison
 
-To be able to compare versions, the tool needs to have a baseline to compare against. The initial run will mark every repository as "updated" because there is no previous version to compare against. From the second run on, the tool will compare the current version with the previous version and only print the repositories that have changed. This means the `components/work/versions.md` file should be persistent somehow (e.g. in a Git Repository) to act as the baseline and keep the previous versions available for comparison.
+To be able to compare versions, the tool needs to have a baseline to compare against. The initial run will mark every repository as "updated" because there is no previous version to compare against. From the second run on, the tool will compare the current version with the previous version and only print the repositories that have changed.
+
+This means the `components/work/versions.md` file should be persistent somehow (e.g. in a Git Repository) to act as the baseline and keep the previous versions available for comparison.
 
 ## Risks and Technical Debts
 
