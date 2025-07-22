@@ -36,9 +36,15 @@ To run the ansible playbook, which checks the versions locally, simply run `task
 |    |                |                        Ansible Playbook  |    |
 |    |                |                                          |    |
 |    |  +-------------+-----+      +------------------------+    |    |
-|    |  |  Fetch data       +----->+    Console Output      |    |    |
-|    |  |  from GitHub API  |      |  (Print release info)  |    |    |
-|    |  +-------------------+      +-------------+----------+    |    |
+|    |  |  Fetch data       +--+-->+    Console Output      |    |    |
+|    |  |  from GitHub API  |  |   |  (Print release info)  |    |    |
+|    |  +-------------------+  |   +------------------------+    |    |
+|    |                         |                                 |    |
+|    |                         |                                 |    |
+|    |                         |   +------------------------+    |    |
+|    |                         +-->+    Markdown Output     |    |    |
+|    |                             |  (Write release info)  |    |    |
+|    |                             +-------------+----------+    |    |
 |    |                                           |               |    |
 |    |                                           v               |    |
 |    |                             +-------------+----------+    |    |
