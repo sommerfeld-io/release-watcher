@@ -26,6 +26,7 @@ services:
 
   lint-workflows:
     image: rhysd/actionlint:latest
+    user: 1000:1000
     volumes: *volumes
     working_dir: *default-workdir
     command: -color
@@ -46,6 +47,7 @@ services:
 
   lint-markdown-links:
     image: lycheeverse/lychee:sha-a11d515-alpine
+    user: 1000:1000
     volumes: *volumes
     working_dir: *default-workdir
     command: --config .lychee.toml .
