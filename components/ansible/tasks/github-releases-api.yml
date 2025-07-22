@@ -2,6 +2,7 @@
 - name: Get release information based on Git tags and GitHub releases
   vars:
     versions_file: versions.md
+    versions_previous_file: previous.md
   block:
 
     - name: INFO  ----  List repositories
@@ -34,6 +35,11 @@
       loop_control:
         extended: true
 
+    - name: INFO  ----  Create {{ versions_previous_file }}
+      ansible.builtin.copy:
+        src: "{{ versions_file }}"
+        dest: "{{ versions_previous_file }}"
+
     - name: INFO  ----  Remove {{ versions_file }}
       ansible.builtin.file:
         path: "{{ versions_file }}"
@@ -45,6 +51,8 @@
         content: |
           # Release Versions
 
+          <!-- GENERATED FROM ANSIBLE -->
+
           | Repository | Published Date | Latest Release |
           |:-----------|---------------:|---------------:|
         mode: u=rw,g=r,o=r
@@ -52,8 +60,19 @@
     - name: INFO  ----  Write release data to {{ versions_file }}
       ansible.builtin.lineinfile:
         path: "{{ versions_file }}"
-        line: "| [{{ github }}/{{ item.org }}/{{ item.repo }}]({{ item.org }}/{{ item.repo }}) | {{ json[ansible_loop.index0].published_date }} | {{ json[ansible_loop.index0].tag_name }} |"
+        line: "| [{{ item.org }}/{{ item.repo }}]({{ github }}/{{ item.org }}/{{ item.repo }}) | {{ json[ansible_loop.index0].published_date }} | {{ json[ansible_loop.index0].tag_name }} |"
         insertafter: EOF
       loop: "{{ repositories }}"
       loop_control:
         extended: true
+
+    - name: INFO  ----  Compare
+      ansible.builtin.shell: >
+        diff -u {{ versions_previous_file }} {{ versions_file }} || true
+      args:
+        executable: /usr/bin/bash
+      register: diff_response
+
+    - name: INFO  ----  Display diff
+      ansible.builtin.debug:
+        msg: "{{ diff_response.stdout_lines }}"

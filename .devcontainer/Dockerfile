@@ -5,6 +5,8 @@ ARG USER=vscode
 
 USER root
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install Ansible
 RUN apt-get update \
     && apt-get install -y --no-install-recommends software-properties-common \
@@ -14,7 +16,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install GitHub CLI
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN (type -p wget >/dev/null || (apt-get update && apt-get install -y --no-install-recommends wget)) \
 	&& mkdir -p -m 755 /etc/apt/keyrings \
 	&& out="$(mktemp)" && wget -nv -O"$out" https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -26,5 +27,15 @@ RUN (type -p wget >/dev/null || (apt-get update && apt-get install -y --no-insta
 	&& apt-get install -y --no-install-recommends gh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Node and Gemimi CLI
+# This only installes Node 18, Gemini requures Node 20 or higher. However, this seems to work.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        nodejs \
+        npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install --location=global @google/gemini-cli
 
 USER ${USER}
