@@ -1,0 +1,5 @@
+# Logo Prompt
+
+2025-07-22 with Sora AI
+
+A small robot with a boxy, cube-shaped design standing on a simple ground surface (indicate floor only, no background, transparent background). The robot has a cube-shaped head with two glowing eyes and metallic eyebrows that give it a focused but calm expression (not angry). Two short, thin antennas on top of the head resemble messy hair. The body is a cube about twice the size of the head, with a few buttons and some visible wires, but not overly detailed. Two short arms extend from the sides of the body. The robot moves using caterpillar tracks mounted on the sides of its body—triangular in shape and rugged in appearance. The color scheme is primarily shades of blue and blue-grey to fit a dark theme like GitHub’s. All components are geometric and boxy—no curves or round parts. The robot is projecting a glowing, translucent beam from its eyes or head area, scanning a floating holographic interface or display in front of it, giving the impression it's analyzing or interacting with digital data. The hologram should look sleek and futuristic, with soft blue lighting and data symbols or panels.
