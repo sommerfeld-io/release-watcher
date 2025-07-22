@@ -17,12 +17,19 @@
       register: response
       loop: "{{ repositories }}"
 
+    - name: INFO  ----  Parse and set release facts
+      ansible.builtin.set_fact:
+        json: "{{ json | default([]) + [{'tag_name': (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('n/a'), 'published_date': (response.results[ansible_loop.index0].stdout | from_json)[0].published_at | default('N/A') | regex_replace('T.*', '')}] }}"
+      loop: "{{ repositories }}"
+      loop_control:
+        extended: true
+
     - name: INFO  ----  Display release information
       ansible.builtin.debug:
         msg:
           - "Repository: {{ item.org }}/{{ item.repo }}"
-          - "Latest release: {{ (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('n/a') }}"
-          - "Published at: {{ (response.results[ansible_loop.index0].stdout | from_json)[0].published_at | default('N/A') | regex_replace('T.*', '') }}"
+          - "Latest release: {{ json[ansible_loop.index0].tag_name }}"
+          - "Published at: {{ json[ansible_loop.index0].published_date }}"
       loop: "{{ repositories }}"
       loop_control:
         extended: true
@@ -45,7 +52,7 @@
     - name: INFO  ----  Write release data to {{ versions_file }}
       ansible.builtin.lineinfile:
         path: "{{ versions_file }}"
-        line: "| [{{ github }}/{{ item.org }}/{{ item.repo }}]({{ item.org }}/{{ item.repo }}) | {{ (response.results[ansible_loop.index0].stdout | from_json)[0].published_at | default('N/A') | regex_replace('T.*', '') }} | {{ (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('n/a') }} |"
+        line: "| [{{ github }}/{{ item.org }}/{{ item.repo }}]({{ item.org }}/{{ item.repo }}) | {{ json[ansible_loop.index0].published_date }} | {{ json[ansible_loop.index0].tag_name }} |"
         insertafter: EOF
       loop: "{{ repositories }}"
       loop_control:
