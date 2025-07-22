@@ -6,6 +6,8 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 The release-watcher tool is a single Ansible project designed to monitor GitHub releases for specified repositories. The list of projects to watch is defined in Ansible variables. When run, the tool uses HTTP requests to query the GitHub Releases API, retrieving release information for each project. This data is then processed and written to the console.
 
+- The versions overview is written to [`components/ansible/versions.md`](components/ansible/versions.md).
+
 ## Pre-requisites
 
 - Ensure you have [Task](https://taskfile.dev) installed on your system.
