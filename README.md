@@ -20,10 +20,10 @@ To run the ansible playbook, which checks the versions locally, simply run `task
 The playbook prints the version information to the console and writes it to a Markdown file in the `components/ansible` directory.
 
 ```ditaa
-            +--------------------+
-            |    GitHub API      |
-            | (Release Info)     |
-            +---------+----------+
+              +------------------+
+              |    GitHub API    |
+              |  (Release Info)  |
+              +-------+----------+
                       ^
                       |
 +---------------------|-----------------------------------------------+
