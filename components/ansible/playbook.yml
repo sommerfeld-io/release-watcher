@@ -1,0 +1,10 @@
+---
+- name: Release Watcher Playbook
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - vars/global.yml
+  tasks:
+
+    - ansible.builtin.import_tasks: tasks/github-releases-api.yml

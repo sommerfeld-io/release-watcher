@@ -12,7 +12,7 @@
 
 		".vscode",
 
-		"components/ansible/playbooks",
+		"components/ansible",
         "components/ansible/tasks",
         "components/ansible/vars",
 

@@ -2,64 +2,54 @@
 
 A lightweight tool to fetch the latest release version from GitHub repositories. It prints the project name, repo URL, and the most recent version tag in a clean format. Perfect for quick checks, scripts, or staying up to date with your dependencies.
 
+The release-watcher tool is a single Ansible project designed to monitor GitHub releases for specified repositories. The list of projects to watch is defined in Ansible variables. When run, the tool uses HTTP requests to query the GitHub Releases API, retrieving release information for each project. This data is then processed and written to the console.
+
 ## Pre-requisites
 
-- Ensure you have Ansible installed on your system.
+- Ensure you have [Task](https://taskfile.dev) installed on your system.
+- Ensure you have [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed on your system.
+- Ensure you have [GitHub CLI](https://cli.github.com/) installed on your system. This tool is mandatory because all GitHub API calls are made using the GitHub CLI.
 - To use an AI summarizer, you need to install an AI tool. In this case, the playbook uses [Gemini CLI](https://github.com/google-gemini/gemini-cli).
+
+The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. You can use it to run the playbook without additional setup.
 
 ## How to run the playbook locally
 
-todo ... how to run locally ... (which command to run and which prerequisites are needed)
+To run the ansible playbook, which checks the versions locally, simply run `task run` in the root directory of this repository.
 
 ```ditaa
-       +--------------------+
-       |    GitHub API      |
-       | (Release Info)     |
-       +---------+----------+
-                 ^
-                 |
-+----------------+----------------+      +-------------------------+
-|     Ansible Playbook (local)    +---- >+    Console Output       |
-| (fetches data from GitHub API)  |      |  (Prints release info)  |
-+---------------------------------+      +-------------+-----------+
-                                                       |
-                                                       v
-                                         +-------------+-----------+
-                                         |     AI Summarizer       |
-                                         |  (Parses + Summarizes)  |
-                                         +-------------------------+
+            +--------------------+
+            |    GitHub API      |
+            | (Release Info)     |
+            +---------+----------+
+                      ^
+                      |
++---------------------|-----------------------------------------------+
+|                     |                                 taskfile.yml  |
+|    +-----------+    |                                               |
+|    |  gh auth  |    |                                               |
+|    |   login   |    |                                               |
+|    +-----+-----+    |                                               |
+|          |          |                                               |
+|          v          |                                               |
+|    +-----+----------|------------------------------------------+    |
+|    |                |                        Ansible Playbook  |    |
+|    |                |                                          |    |
+|    |  +-------------+-----+      +------------------------+    |    |
+|    |  |  Fetch data       +----->+    Console Output      |    |    |
+|    |  |  from GitHub API  |      |  (Print release info)  |    |    |
+|    |  +-------------------+      +-------------+----------+    |    |
+|    |                                           |               |    |
+|    |                                           v               |    |
+|    |                             +-------------+----------+    |    |
+|    |                             |     AI Summarizer      |    |    |
+|    |                             |  (Parse + Summarizes)  |    |    |
+|    |                             +------------------------+    |    |
+|    |                                                           |    |
+|    +-----------------------------------------------------------+    |
+|                                                                     |
++---------------------------------------------------------------------+
 ```
-
-## How to run the playbook in a GitHub Actions Workflow
-
-todo ... summary ...
-
-```ditaa
-       +--------------------+
-       |    GitHub API      |
-       | (Release Info)     |
-       +---------+----------+
-                 ^
-                 |
-+----------------+----------------+      +-------------------------+
-|     Ansible Playbook            +---- >+    Console Output       |
-| (fetches data from GitHub API)  |      |  (Prints release info)  |
-+---------------------------------+      +-------------+-----------+
-                                                       |
-                                                       v
-                                         +-------------+-----------+
-                                         |     AI Summarizer       |
-                                         |  (Parses + Summarizes)  |
-                                         +-------------+-----------+
-                                                       |
-                                                       v
-                                            +----------+-----------+
-                                            |   Google Chat Bot    |
-                                            | (Sends update msg)   |
-                                            +----------------------+
-```
-
-todo ... sample workflow.yml ...
 
 ## Risks and Technical Debts
 
