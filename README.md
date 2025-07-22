@@ -62,7 +62,7 @@ When running release-watcher, you will be asked to log in to GitHub using the Gi
 - Ensure you have [JQ](https://stedolan.github.io/jq) installed on your system. This tool is used to parse the JSON output from the GitHub API.
 - Ensure you have `diff` installed on your system. This tool is used to compare files (in this case the files containing the previous and current versions of the releases). Normally the tool is shipped with Ubuntu.
 
-The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. You can use it to run the playbook without additional setup.
+The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. No additional setup is required other than VSCode with the DevContainer extension.
 
 ## :zap: Baseline for Version Comparison
 
