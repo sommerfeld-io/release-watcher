@@ -1,5 +1,7 @@
 {
 	"rules": [
+        ".assets",
+
 		".devcontainer",
 		".devcontainer/ops",
 		".devcontainer/ops/assets",
