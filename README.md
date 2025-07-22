@@ -10,7 +10,7 @@ The release-watcher tool is a single project designed to monitor GitHub releases
 
 The app queries the GitHub Releases API for the latest releases of the specified repositories. E.g. <https://api.github.com/repos/argoproj/argo-cd/releases/latest>. That means pre-releases are not included in the output.
 
-The versions) overview for the [list of repos as specified in this repository](components/taskfile.yml is written to [`components/work/versions.md`](components/work/versions.md).
+The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/work/versions.md`](components/work/versions.md).
 
 The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. You can use it to run the playbook without additional setup.
 
