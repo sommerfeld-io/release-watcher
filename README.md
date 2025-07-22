@@ -12,8 +12,6 @@ The app queries the GitHub Releases API for the latest releases of the specified
 
 The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/work/versions.md`](components/work/versions.md).
 
-The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. You can use it to run the playbook without additional setup.
-
 ## How to use with `task`
 
 To run the app locally, simply run `task run` from [components/taskfile.yml](components/taskfile.yml) - e.g. `cd components && task run`.
@@ -63,6 +61,8 @@ When running release-watcher, you will be asked to log in to GitHub using the Gi
 - Ensure you have [GitHub CLI](https://cli.github.com) installed on your system. This tool is mandatory because all GitHub API calls are made using the GitHub CLI.
 - Ensure you have [JQ](https://stedolan.github.io/jq) installed on your system. This tool is used to parse the JSON output from the GitHub API.
 - Ensure you have `diff` installed on your system. This tool is used to compare files (in this case the files containing the previous and current versions of the releases). Normally the tool is shipped with Ubuntu.
+
+The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. You can use it to run the playbook without additional setup.
 
 ## :zap: Baseline for Version Comparison
 
