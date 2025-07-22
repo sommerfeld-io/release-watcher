@@ -4,7 +4,7 @@
   gather_facts: false
   become: false
   vars_files:
-    - ../vars/global.yml
+    - vars/global.yml
   tasks:
 
-    - ansible.builtin.import_tasks: ../tasks/github-releases-api.yml
+    - ansible.builtin.import_tasks: tasks/github-releases-api.yml

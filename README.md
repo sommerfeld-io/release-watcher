@@ -6,6 +6,7 @@ The release-watcher tool is a single Ansible project designed to monitor GitHub 
 
 ## Pre-requisites
 
+- Ensure you have [Task](https://taskfile.dev) installed on your system.
 - Ensure you have [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed on your system.
 - Ensure you have [GitHub CLI](https://cli.github.com/) installed on your system. This tool is mandatory because all GitHub API calls are made using the GitHub CLI.
 - To use an AI summarizer, you need to install an AI tool. In this case, the playbook uses [Gemini CLI](https://github.com/google-gemini/gemini-cli).
@@ -14,7 +15,7 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
 ## How to run the playbook locally
 
-todo ... how to run locally ... (which command to run and the info about the gh auth login)
+To run the ansible playbook, which checks the versions locally, simply run `task run` in the root directory of this repository.
 
 ```ditaa
             +--------------------+

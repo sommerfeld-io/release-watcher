@@ -1,5 +1,7 @@
 ---
 - name: Get release information based on Git tags and GitHub releases
+  vars:
+    versions_file: versions.md
   block:
 
     - name: INFO  ----  List repositories
@@ -19,8 +21,32 @@
       ansible.builtin.debug:
         msg:
           - "Repository: {{ item.org }}/{{ item.repo }}"
-          - "Latest release: {{ (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('No releases') }}"
+          - "Latest release: {{ (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('n/a') }}"
           - "Published at: {{ (response.results[ansible_loop.index0].stdout | from_json)[0].published_at | default('N/A') | regex_replace('T.*', '') }}"
+      loop: "{{ repositories }}"
+      loop_control:
+        extended: true
+
+    - name: INFO  ----  Remove {{ versions_file }}
+      ansible.builtin.file:
+        path: "{{ versions_file }}"
+        state: absent
+
+    - name: INFO  ----  Create {{ versions_file }}
+      ansible.builtin.copy:
+        dest: "{{ versions_file }}"
+        content: |
+          # Release Versions
+
+          | Repository | Published Date | Latest Release |
+          |:-----------|---------------:|---------------:|
+        mode: u=rw,g=r,o=r
+
+    - name: INFO  ----  Write release data to {{ versions_file }}
+      ansible.builtin.lineinfile:
+        path: "{{ versions_file }}"
+        line: "| [{{ github }}/{{ item.org }}/{{ item.repo }}]({{ item.org }}/{{ item.repo }}) | {{ (response.results[ansible_loop.index0].stdout | from_json)[0].published_at | default('N/A') | regex_replace('T.*', '') }} | {{ (response.results[ansible_loop.index0].stdout | from_json)[0].tag_name | default('n/a') }} |"
+        insertafter: EOF
       loop: "{{ repositories }}"
       loop_control:
         extended: true

@@ -36,6 +36,7 @@ tasks:
       - rm -rf .cache
       - rm -rf node_modules
       - rm -rf target
+      - rm components/ansible/versions.md
       - find . -type f -exec chmod +r {} +
 
   # ===============================================================================================
@@ -51,9 +52,9 @@ tasks:
 
   run:
     vars:
-      PLAYBOOK: release-watcher.yml
+      PLAYBOOK: playbook.yml
     desc: Run the release-watcher Ansible playbook
     dir: components/ansible
     cmds:
       - gh auth status || gh auth login
-      - ansible-playbook "playbooks/{{ .PLAYBOOK }}"
+      - ansible-playbook "{{ .PLAYBOOK }}"
