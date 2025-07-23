@@ -14,13 +14,20 @@ vars:
   GREY: "\e[30m"
   B: "\e[34m"
 
-  REPOSITORIES:
-    sh: jq -r '.repositories[]' .release-watcher.json
-
   TARGET_DIR: "work"
   TARGET: "{{ .TARGET_DIR }}/versions.md"
   PREVIOUS: "{{ .TARGET_DIR }}/previous-versions.md"
   TEMPLATE: template.md
+
+  # Configuration file for the release watcher and its contents
+  # This file should be in the same directory as this taskfile.yml
+  # It contains the repositories and helm charts to check for updates.
+  # In case a config block is not defined, we fallback to an empty array.
+  CONFIG_FILE: ".release-watcher.json"
+  REPOSITORIES:
+    sh: jq -r '.repositories // [] | .[]' {{ .CONFIG_FILE }}
+  HELM_CHARTS:
+    sh: jq -r '.helm_charts // [] | .[]' {{ .CONFIG_FILE }}
 
 tasks:
 
@@ -81,6 +88,15 @@ tasks:
         echo "| [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
     silent: true
 
+  internal:check-helmchart-version:*:
+    desc: Check Helm chart versions for defined charts
+    internal: true
+    vars:
+      REPO: '{{ index .MATCH 0 }}'
+    cmds:
+      - echo "{{ .LOG_INFO }} Checking Helm chart {{ .P }}{{ .REPO }}{{ .D }} for new versions"
+    silent: true
+
   internal:compare:
     desc: Compare current and previous versions files
     internal: true
@@ -108,6 +124,9 @@ tasks:
       - for:
           var: REPOSITORIES
         task: internal:query-github-releases-api:{{ .ITEM }}
+      - for:
+          var: HELM_CHARTS
+        task: internal:check-helmchart-version:{{ .ITEM }}
       - task: internal:post
       - task: internal:compare
       - task: internal:cleanup

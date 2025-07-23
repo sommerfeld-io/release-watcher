@@ -12,5 +12,10 @@
     "elastic/cloud-on-k8s",
     "external-secrets/external-secrets",
     "kanisterio/kanister"
+  ],
+  "helm_charts": [
+    "work",
+    "in",
+    "progress"
   ]
 }
