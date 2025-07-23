@@ -52,36 +52,34 @@ docker run --rm -it --volume ".release-watcher.json:/app/.release-watcher.json" 
 
 ### How to use with `task` (from this repsitory)
 
-Clone the repository to your local machine.
-
-Create a `components/.release-watcher.json` file next to `components/taskfile.yml`. This file contains the list of repositories to watch. The file should look like this:
-
-```json
-{
-  "repositories": [
-    "sommerfeld-io/release-watcher",
-    "sommerfeld-io/container-images"
-  ]
-}
-```
-
-Then simply run `task run` from [components/taskfile.yml](components/taskfile.yml).
-
-```bash
-cd components
-task run
-```
-
-This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
-
-#### Prerequisites when running with `task`
-
 - Ensure you have [Task](https://taskfile.dev) installed on your system.
 - Ensure you have [GitHub CLI](https://cli.github.com) installed on your system. This tool is mandatory because all GitHub API calls are made using the GitHub CLI.
 - Ensure you have [JQ](https://stedolan.github.io/jq) installed on your system. This tool is used to parse the JSON output from the GitHub API.
 - Ensure you have `diff` installed on your system. This tool is used to compare files (in this case the files containing the previous and current versions of the releases). Normally the tool is shipped with Ubuntu.
 
 The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. No additional setup is required other than VSCode with the DevContainer extension.
+
+- Clone the repository to your local machine.
+
+- Create a `components/.release-watcher.json` file next to `components/taskfile.yml`. This file contains the list of repositories to watch. The file should look like this:
+
+  ```json
+  {
+    "repositories": [
+      "sommerfeld-io/release-watcher",
+      "sommerfeld-io/container-images"
+    ]
+  }
+  ```
+
+- Then simply run `task run` from [components/taskfile.yml](components/taskfile.yml).
+
+  ```bash
+  cd components
+  task run
+  ```
+
+- This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
 
 ## :zap: Baseline for Version Comparison
 
