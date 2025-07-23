@@ -4,6 +4,10 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 ![Project Logo](https://raw.githubusercontent.com/sommerfeld-io/release-watcher/refs/heads/main/.assets/logo.png)
 
+- [sommerfeld-io/release-watcher](https://hub.docker.com/r/sommerfeldio/release-watcher) on Docker Hub
+- [Dockerfile source code](https://github.com/sommerfeld-io/release-watcher/tree/main/components) on GitHub
+- [How to Contribute](https://github.com/sommerfeld-io/.github/blob/main/CONTRIBUTING.md)
+
 **Example Output:** The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/output/versions.md`](components/output/versions.md).
 
 ## Supported Sources / Which objects can be watched?
@@ -22,8 +26,7 @@ When running release-watcher, you will be asked to log in to GitHub using the Gi
 
 You can run the release-watcher in a Docker container. The Docker image is built from the [Dockerfile](components/Dockerfile) in this repository.
 
-<!-- TODO ================================================================================== -->
-<!-- The Dockerfile is also [available on Docker Hub as `sommerfeldio/release-watcher`](https://hub.docker.com/r/sommerfeldio/release-watcher). -->
+The Dockerfile is also [available on Docker Hub as `sommerfeldio/release-watcher`](https://hub.docker.com/r/sommerfeldio/release-watcher).
 
 Create a `.release-watcher.json` file in the current directory. This file contains the list of repositories to watch. The file should look like this:
 
