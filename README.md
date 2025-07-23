@@ -2,11 +2,11 @@
 
 A lightweight tool to fetch the latest release version from GitHub repositories. It prints the project name, URL to the release, and the most recent version tag in a clean format. Perfect for quick checks, scripts, or staying up to date with your dependencies. The results are compared to data from previous runs, and any changes are displayed in a human-readable format.
 
-![Project Logo](https://raw.githubusercontent.com/sommerfeld-io/release-watcher/refs/heads/main/.assets/logo.png)
-
 - [sommerfeld-io/release-watcher](https://hub.docker.com/r/sommerfeldio/release-watcher) on Docker Hub
 - [Dockerfile source code](https://github.com/sommerfeld-io/release-watcher/tree/main/components) on GitHub
 - [How to Contribute](https://github.com/sommerfeld-io/.github/blob/main/CONTRIBUTING.md)
+
+![Project Logo](https://raw.githubusercontent.com/sommerfeld-io/release-watcher/refs/heads/main/.assets/logo.png)
 
 **Example Output:** The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/output/versions.md`](components/output/versions.md).
 
