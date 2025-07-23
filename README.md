@@ -14,41 +14,6 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 When running release-watcher, you will be asked to log in to GitHub using the GitHub CLI. This is necessary to access the GitHub API without running into rate limits. release-watcher uses the GitHub CLI for the login, so whether credentials are stored in the local cache or not is up to the GitHub CLI.
 
-```ditaa
-              +------------------+
-              |    GitHub API    |
-              |  (Release Info)  |
-              +-------+----------+
-                      ^
-                      |
-+---------------------|------------------------------------------------+
-|                     |                                  taskfile.yml  |
-|    +-----------+    |                                                |
-|    |  gh auth  |    |                                                |
-|    |   login   |    |                                                |
-|    +-----+-----+    |                                                |
-|          |          |                                                |
-|          v          |                                                |
-|       +--+----------+-----+      +------------------------+          |
-|       |  Fetch data       +--+-->+    Console Output      |          |
-|       |  from GitHub API  |  |   |  (Print release info)  |          |
-|       +-------------------+  |   +------------------------+          |
-|                              |                                       |
-|                              |                                       |
-|                              |         +------------------------+    |
-|                              +-------->+    Markdown Output     |    |
-|                                        |  (Write release info)  |    |
-|                                        +-------------+----------+    |
-|                                                      |               |
-|                                                      v               |
-|                                        +-------------+----------+    |
-|                                        |     Compare changes    |    |
-|                                        |           diff         |    |
-|                                        +------------------------+    |
-|                                                                      |
-+----------------------------------------------------------------------+
-```
-
 ### How to use with Docker
 
 You can run the release-watcher in a Docker container. The Docker image is built from the [Dockerfile](components/Dockerfile) in this repository.
@@ -123,6 +88,45 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 To be able to compare versions, the tool needs to have a baseline to compare against. The initial run will mark every repository as "updated" because there is no previous version to compare against. From the second run on, the tool will compare the current version with the previous version and only print the repositories that have changed.
 
 This means the `components/output/versions.md` file should be persisted somehow (e.g. in a Git Repository) to act as the baseline for keeping the previous versions available for comparison.
+
+## Building Blocks
+
+The `taskfile.yml` file in the `components` directory defines the tasks to be executed. This is the main entry point for the application - regardless of whether you run it with Docker or `task` directly on your machine. When running inside Docker, the app does exactly the same as when running with `task` - just inside a container.
+
+```ditaa
+              +------------------+
+              |    GitHub API    |
+              |  (Release Info)  |
+              +-------+----------+
+                      ^
+                      |
++---------------------|------------------------------------------------+
+|                     |                                  taskfile.yml  |
+|    +-----------+    |                                                |
+|    |  gh auth  |    |                                                |
+|    |   login   |    |                                                |
+|    +-----+-----+    |                                                |
+|          |          |                                                |
+|          v          |                                                |
+|       +--+----------+-----+      +------------------------+          |
+|       |  Fetch data       +--+-->+    Console Output      |          |
+|       |  from GitHub API  |  |   |  (Print release info)  |          |
+|       +-------------------+  |   +------------------------+          |
+|                              |                                       |
+|                              |                                       |
+|                              |         +------------------------+    |
+|                              +-------->+    Markdown Output     |    |
+|                                        |  (Write release info)  |    |
+|                                        +-------------+----------+    |
+|                                                      |               |
+|                                                      v               |
+|                                        +-------------+----------+    |
+|                                        |     Compare changes    |    |
+|                                        |           diff         |    |
+|                                        +------------------------+    |
+|                                                                      |
++----------------------------------------------------------------------+
+```
 
 ## Risks and Technical Debts
 
