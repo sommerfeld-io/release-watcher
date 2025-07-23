@@ -159,10 +159,11 @@ jobs:
         env:
           REGISTRY: ${{ env.REGISTRY }}
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+          NAME: ${{ env.IMAGE_NAME }}
           COMMIT_SHA: ${{ github.sha }}
         run: |
-          SRC_IMAGE="$REGISTRY/$DOCKERHUB_USER/$IMAGE_NAME:$COMMIT_SHA"
-          TARGET_IMAGE="$DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG_EDGE"
+          SRC_IMAGE="$REGISTRY/$DOCKERHUB_USER/$NAME:$COMMIT_SHA"
+          TARGET_IMAGE="$DOCKERHUB_USER/$NAME:$IMAGE_TAG_EDGE"
           docker buildx imagetools create --tag "$TARGET_IMAGE" "$SRC_IMAGE"
         shell: bash
 
@@ -239,12 +240,12 @@ jobs:
         env:
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
           COMMIT_SHA: ${{ github.sha }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          NAME: ${{ env.IMAGE_NAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           TOKEN=$(curl -s -H "Content-Type: application/json" -X POST \
             -d "{\"username\": \"$DOCKERHUB_USER\", \"password\": \"$DOCKERHUB_TOKEN\"}" \
             https://hub.docker.com/v2/users/login/ | jq -r .token)
           curl -X DELETE -H "Authorization: JWT ${TOKEN}" \
-            "https://hub.docker.com/v2/repositories/${DOCKERHUB_USER}/${IMAGE_NAME}/tags/${COMMIT_SHA}/"
+            "https://hub.docker.com/v2/repositories/${DOCKERHUB_USER}/${NAME}/tags/${COMMIT_SHA}/"
         shell: bash
