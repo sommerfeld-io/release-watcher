@@ -6,7 +6,7 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 **Example Output:** The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/work/versions.md`](components/work/versions.md).
 
-## Supported Repositories
+## Supported Sources / Which objects can be watched?
 
 - **Releases (= Git Tags) from GitHub:** The app queries the GitHub Releases API for the latest releases of the specified repositories. E.g. <https://api.github.com/repos/argoproj/argo-cd/releases/latest>. That means pre-releases are not included in the output.
 
