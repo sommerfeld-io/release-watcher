@@ -2,7 +2,6 @@
 version: '3.42.1'
 
 vars:
-  # LOG_INFO: "[INFO]"
   LOG_DONE: "[\e[32mDONE\e[0m]"
   LOG_ERROR: "[\e[31mERROR\e[0m]"
   LOG_INFO: "[\e[34mINFO\e[0m]"
@@ -15,21 +14,9 @@ vars:
   GREY: "\e[30m"
   B: "\e[34m"
 
-  REPOSITORIES: [
-    "argoproj/argo-cd",
-    "argoproj-labs/argocd-autopilot",
-    "sommerfeld-io/release-watcher",
+  REPOSITORIES:
+    sh: jq -r '.repositories[]' .release-watcher.json
 
-    "kubernetes-sigs/gateway-api", # Gateway API CRDs
-    "nginxinc/nginx-gateway-fabric",
-    "nolar/kopf",
-    "grafana/loki",
-    "grafana/grafana-operator",
-    "grafana/grafana",
-    "elastic/cloud-on-k8s", # Elasticsearch Operator
-    "external-secrets/external-secrets",
-    "kanisterio/kanister",
-  ]
   TARGET_DIR: "work"
   TARGET: "{{ .TARGET_DIR }}/versions.md"
   PREVIOUS: "{{ .TARGET_DIR }}/previous-versions.md"
