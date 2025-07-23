@@ -49,29 +49,65 @@ When running release-watcher, you will be asked to log in to GitHub using the Gi
 +----------------------------------------------------------------------+
 ```
 
+### How to use with Docker
+
+You can run the release-watcher in a Docker container. The Docker image is built from the [Dockerfile](components/Dockerfile) in this repository.
+
+<!-- TODO ================================================================================== -->
+<!-- The Dockerfile is also [available on Docker Hub as `sommerfeldio/release-watcher`](https://hub.docker.com/r/sommerfeldio/release-watcher). -->
+
+Create a `.release-watcher.json` file in the current directory. This file contains the list of repositories to watch. The file should look like this:
+
+```json
+{
+  "repositories": [
+    "sommerfeld-io/release-watcher",
+    "sommerfeld-io/container-images"
+  ]
+}
+```
+
+To run with Docker Compose, create a `docker-compose.yml` in the same directory as the `.release-watcher.json` file and run `docker compose up.
+
+```docker-compose.yml
+services:
+  release-watcher:
+    image: sommerfeldio/release-watcher:latest
+    volumes:
+      - .release-watcher.json:/app/.release-watcher.json
+      - ./output:/app/output
+    tty: true
+```
+
+TO run with Docker directly, run the following command in directory where the `.release-watcher.json` file is located:
+
+```bash
+docker run --rm -it --volume ".release-watcher.json:/app/.release-watcher.json" --volume "output:/app/output" sommerfeldio/release-watcher:latest
+```
+
 ### How to use with `task` (from this repsitory)
 
-- Clone the repository to your local machine.
+Clone the repository to your local machine.
 
-- Create a `components/.release-watcher.json` file next to `components/taskfile.yml`. This file contains the list of repositories to watch. The file should look like this:
+Create a `components/.release-watcher.json` file next to `components/taskfile.yml`. This file contains the list of repositories to watch. The file should look like this:
 
-  ```json
-  {
-    "repositories": [
-      "sommerfeld-io/release-watcher",
-      "sommerfeld-io/container-images"
-    ]
-  }
-  ```
+```json
+{
+  "repositories": [
+    "sommerfeld-io/release-watcher",
+    "sommerfeld-io/container-images"
+  ]
+}
+```
 
-- Then simply run `task run` from [components/taskfile.yml](components/taskfile.yml).
+Then simply run `task run` from [components/taskfile.yml](components/taskfile.yml).
 
-  ```bash
-  cd components
-  task run
-  ```
+```bash
+cd components
+task run
+```
 
-- This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
+This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
 
 #### Prerequisites when running with `task`
 

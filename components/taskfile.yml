@@ -131,3 +131,14 @@ tasks:
       - task: internal:compare
       - task: internal:cleanup
     silent: true
+
+  run:docker:
+    desc: Build and run as Docker container
+    summary: >
+      Check if new releases are available for the defined repositories
+      compared to the last time you ran the task.
+    cmds:
+      - docker compose build
+      - docker compose run release-watcher
+      # TODO when gh auth works headless, then replace with `docker compose up`
+    silent: true
