@@ -123,7 +123,7 @@ jobs:
           context: components/
           platforms: linux/amd64
           push: true
-          tags: ${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USER }}/:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
@@ -133,7 +133,7 @@ jobs:
       #   uses: docker/scout-action@v1.18.1
       #   with:
       #     command: compare # cves,compare
-      #     image: ${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USER }}/:${{ github.sha }}
+      #     image: ${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
       #     to: ${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USER }}/:${{ env.IMAGE_TAG_LATEST }}
       #     exit-code: false
       #     write-comment: true
