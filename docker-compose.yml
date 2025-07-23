@@ -53,14 +53,14 @@ services:
     command: --config .lychee.toml .
     tty: *tty
 
-  hadolint-devcontainer:
+  lint-devcontainer:
     image: &lint-dockerfile-image hadolint/hadolint:latest
     volumes: *volumes
     working_dir: *default-workdir
     entrypoint: hadolint .devcontainer/Dockerfile
     tty: *tty
 
-  hadolint-dockerfile:
+  lint-dockerfile:
     image: *lint-dockerfile-image
     volumes: *volumes
     working_dir: *default-workdir
