@@ -10,6 +10,10 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 - **Releases (= Git Tags) from GitHub:** The app queries the GitHub Releases API for the latest releases of the specified repositories. E.g. <https://api.github.com/repos/argoproj/argo-cd/releases/latest>. That means pre-releases are not included in the output.
 
+## Software Tags and Versioning
+
+Learn about our tagging policy and the difference between rolling tags and immutable tags [on our documentation page⁠](https://github.com/sommerfeld-io/.github/blob/main/docs/tags-and-versions.md).
+
 ## Usage
 
 When running release-watcher, you will be asked to log in to GitHub using the GitHub CLI. This is necessary to access the GitHub API without running into rate limits. release-watcher uses the GitHub CLI for the login, so whether credentials are stored in the local cache or not is up to the GitHub CLI.
