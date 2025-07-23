@@ -241,6 +241,7 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
+          echo "Image name = ${DOCKERHUB_USER}/${IMAGE_NAME}:${COMMIT_SHA}"
           TOKEN=$(curl -s -H "Content-Type: application/json" -X POST \
             -d "{\"username\": \"$DOCKERHUB_USER\", \"password\": \"$DOCKERHUB_TOKEN\"}" \
             https://hub.docker.com/v2/users/login/ | jq -r .token)
