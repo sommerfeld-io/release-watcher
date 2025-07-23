@@ -18,9 +18,9 @@ on:
 
 env:
   REGISTRY: docker.io
+  IMAGE_NAME: release-watcher
   IMAGE_TAG_EDGE: ${{ vars.IMAGE_TAG_EDGE }}
   IMAGE_TAG_LATEST: ${{ vars.IMAGE_TAG_LATEST }}
-  IMAGE_NAME: release-watcher
 
 permissions:
   contents: read
