@@ -14,7 +14,7 @@ vars:
   GREY: "\e[30m"
   B: "\e[34m"
 
-  TARGET_DIR: "work"
+  TARGET_DIR: "output"
   TARGET: "{{ .TARGET_DIR }}/versions.md"
   PREVIOUS: "{{ .TARGET_DIR }}/previous-versions.md"
   TEMPLATE: template.md

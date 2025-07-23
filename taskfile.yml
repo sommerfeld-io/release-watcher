@@ -45,7 +45,8 @@ tasks:
     cmds:
       - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
-      - docker compose up hadolint-devcontainer --exit-code-from hadolint-devcontainer
+      - for: ['dockerfile', 'devcontainer']
+        cmd: docker compose up hadolint-{{ .ITEM }} --exit-code-from hadolint-{{ .ITEM }}
 
   # ===============================================================================================
 

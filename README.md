@@ -4,7 +4,7 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 ![Project Logo](https://raw.githubusercontent.com/sommerfeld-io/release-watcher/refs/heads/main/.assets/logo.png)
 
-**Example Output:** The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/work/versions.md`](components/work/versions.md).
+**Example Output:** The versions overview for the [list of repos as specified in this repository](components/taskfile.yml) is written to [`components/output/versions.md`](components/output/versions.md).
 
 ## Supported Sources / Which objects can be watched?
 
@@ -71,7 +71,7 @@ When running release-watcher, you will be asked to log in to GitHub using the Gi
   task run
   ```
 
-- This prints the version information to the console and writes it to a markdown file in the `components/work` directory.
+- This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
 
 #### Prerequisites when running with `task`
 
@@ -86,7 +86,7 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
 To be able to compare versions, the tool needs to have a baseline to compare against. The initial run will mark every repository as "updated" because there is no previous version to compare against. From the second run on, the tool will compare the current version with the previous version and only print the repositories that have changed.
 
-This means the `components/work/versions.md` file should be persisted somehow (e.g. in a Git Repository) to act as the baseline for keeping the previous versions available for comparison.
+This means the `components/output/versions.md` file should be persisted somehow (e.g. in a Git Repository) to act as the baseline for keeping the previous versions available for comparison.
 
 ## Risks and Technical Debts
 

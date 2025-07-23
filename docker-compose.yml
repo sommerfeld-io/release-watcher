@@ -59,3 +59,10 @@ services:
     working_dir: *default-workdir
     entrypoint: hadolint .devcontainer/Dockerfile
     tty: *tty
+
+  hadolint-dockerfile:
+    image: *lint-dockerfile-image
+    volumes: *volumes
+    working_dir: *default-workdir
+    entrypoint: hadolint components/Dockerfile
+    tty: *tty
