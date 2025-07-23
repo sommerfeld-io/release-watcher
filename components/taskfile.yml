@@ -71,6 +71,7 @@ tasks:
     internal: true
     vars:
       REPO: '{{ index .MATCH 0 }}'
+      TYPE: Repository
     cmds:
       - echo "{{ .LOG_INFO }} Checking repository {{ .P }}{{ .REPO }}{{ .D }} for new versions"
       - |
@@ -85,7 +86,7 @@ tasks:
         echo -e "{{ .LOG_INFO }} {{ .GREY }}      Published at = $PUBLISHED_FORMATTED{{ .D }}"
         echo -e "{{ .LOG_INFO }} {{ .GREY }}       Release URL = $URL{{ .D }}"
 
-        echo "| [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
+        echo "| {{ .TYPE }} | [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
     silent: true
 
   internal:check-helmchart-version:*:
