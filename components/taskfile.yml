@@ -2,7 +2,6 @@
 version: '3.42.1'
 
 vars:
-  # LOG_INFO: "[INFO]"
   LOG_DONE: "[\e[32mDONE\e[0m]"
   LOG_ERROR: "[\e[31mERROR\e[0m]"
   LOG_INFO: "[\e[34mINFO\e[0m]"
@@ -15,25 +14,20 @@ vars:
   GREY: "\e[30m"
   B: "\e[34m"
 
-  REPOSITORIES: [
-    "argoproj/argo-cd",
-    "argoproj-labs/argocd-autopilot",
-    "sommerfeld-io/release-watcher",
-
-    "kubernetes-sigs/gateway-api", # Gateway API CRDs
-    "nginxinc/nginx-gateway-fabric",
-    "nolar/kopf",
-    "grafana/loki",
-    "grafana/grafana-operator",
-    "grafana/grafana",
-    "elastic/cloud-on-k8s", # Elasticsearch Operator
-    "external-secrets/external-secrets",
-    "kanisterio/kanister",
-  ]
-  TARGET_DIR: "work"
+  TARGET_DIR: "output"
   TARGET: "{{ .TARGET_DIR }}/versions.md"
   PREVIOUS: "{{ .TARGET_DIR }}/previous-versions.md"
   TEMPLATE: template.md
+
+  # Configuration file for the release watcher and its contents
+  # This file should be in the same directory as this taskfile.yml
+  # It contains the repositories and helm charts to check for updates.
+  # In case a config block is not defined, we fallback to an empty array.
+  CONFIG_FILE: ".release-watcher.json"
+  REPOSITORIES:
+    sh: jq -r '.repositories // [] | .[]' {{ .CONFIG_FILE }}
+  HELM_CHARTS:
+    sh: jq -r '.helm_charts // [] | .[]' {{ .CONFIG_FILE }}
 
 tasks:
 
@@ -77,6 +71,7 @@ tasks:
     internal: true
     vars:
       REPO: '{{ index .MATCH 0 }}'
+      TYPE: Repository
     cmds:
       - echo "{{ .LOG_INFO }} Checking repository {{ .P }}{{ .REPO }}{{ .D }} for new versions"
       - |
@@ -91,7 +86,16 @@ tasks:
         echo -e "{{ .LOG_INFO }} {{ .GREY }}      Published at = $PUBLISHED_FORMATTED{{ .D }}"
         echo -e "{{ .LOG_INFO }} {{ .GREY }}       Release URL = $URL{{ .D }}"
 
-        echo "| [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
+        echo "| {{ .TYPE }} | [{{ .REPO }}]($URL) | $PUBLISHED_FORMATTED | $TAG_NAME |" >> {{ .TARGET }}
+    silent: true
+
+  internal:check-helmchart-version:*:
+    desc: Check Helm chart versions for defined charts
+    internal: true
+    vars:
+      REPO: '{{ index .MATCH 0 }}'
+    cmds:
+      - echo "{{ .LOG_INFO }} Checking Helm chart {{ .P }}{{ .REPO }}{{ .D }} for new versions"
     silent: true
 
   internal:compare:
@@ -121,7 +125,21 @@ tasks:
       - for:
           var: REPOSITORIES
         task: internal:query-github-releases-api:{{ .ITEM }}
+      - for:
+          var: HELM_CHARTS
+        task: internal:check-helmchart-version:{{ .ITEM }}
       - task: internal:post
       - task: internal:compare
       - task: internal:cleanup
+    silent: true
+
+  run:docker:
+    desc: Build and run as Docker container
+    summary: >
+      Check if new releases are available for the defined repositories
+      compared to the last time you ran the task.
+    cmds:
+      - docker compose build
+      - docker compose run release-watcher
+      # TODO when gh auth works headless, then replace with `docker compose up`
     silent: true

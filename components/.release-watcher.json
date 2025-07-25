@@ -1,0 +1,21 @@
+{
+  "repositories": [
+    "argoproj/argo-cd",
+    "argoproj-labs/argocd-autopilot",
+    "sommerfeld-io/release-watcher",
+    "kubernetes-sigs/gateway-api",
+    "nginxinc/nginx-gateway-fabric",
+    "nolar/kopf",
+    "grafana/loki",
+    "grafana/grafana-operator",
+    "grafana/grafana",
+    "elastic/cloud-on-k8s",
+    "external-secrets/external-secrets",
+    "kanisterio/kanister"
+  ],
+  "helm_charts": [
+    "work",
+    "in",
+    "progress"
+  ]
+}

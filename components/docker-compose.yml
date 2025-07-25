@@ -1,0 +1,28 @@
+---
+x-volumes: &volumes
+  - /etc/timezone:/etc/timezone:ro
+  - /etc/localtime:/etc/localtime:ro
+  - project-root-volume:/workspaces/release-watcher/components
+x-workdir: &default-workdir /workspaces/release-watcher/components
+x-tty: &tty true
+
+volumes:
+
+  project-root-volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: .
+      o: bind
+
+services:
+
+  release-watcher:
+    image: local/release-watcher:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .release-watcher.json:/app/.release-watcher.json
+      - ./output:/app/output
+    tty: *tty

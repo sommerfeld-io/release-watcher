@@ -15,7 +15,7 @@
 		".vscode",
 
 		"components",
-        "components/work",
+        "components/output",
 
         "node_modules/**",
 		"public/**",

@@ -43,9 +43,8 @@ tasks:
   lint:
     desc: Run all project linters (except Dockerfile linters)
     cmds:
-      - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links']
+      - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links', 'dockerfile', 'devcontainer']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
-      - docker compose up hadolint-devcontainer --exit-code-from hadolint-devcontainer
 
   # ===============================================================================================
 

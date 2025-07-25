@@ -51,6 +51,7 @@ ignore:
   - components/talos-cluster/helm-charts/hello-world-nginx/Chart.yaml
 
   # linter definitions etc.
+  - components/.release-watcher.json
   - .editorconfig
   - .hadolint.yml
   - .kube-linter.yml
