@@ -29,17 +29,10 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user
-RUN groupadd -r appuser && useradd -r -g appuser -u 10001 appuser
-
 COPY taskfile.yml /app/taskfile.yml
 COPY template.md /app/template.md
+COPY .release-watcher.json /app/.release-watcher.json
 WORKDIR /app
 
-# Change ownership of the app directory to the non-root user
-RUN chown -R appuser:appuser /app
-
-# Switch to non-root user
-USER appuser
 
 ENTRYPOINT [ "task", "run" ]
