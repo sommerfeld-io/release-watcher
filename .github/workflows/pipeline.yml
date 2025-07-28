@@ -11,6 +11,7 @@ on:
       - 'docs/**'
       - '.devcontainer/**'
       - '.github/workflows/dev-environment.yml'
+      - '.github/workflows/release-watcher.yml'
       - '.vscode/**'
       - '.gitkeep'
   schedule:
