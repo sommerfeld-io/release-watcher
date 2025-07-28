@@ -39,15 +39,13 @@ tasks:
       - gh auth status || gh auth login
     silent: true
 
-  internal:login:*:
-    desc: Run all login tasks
-    vars:
-      TOKEN: '{{ index .MATCH 0 }}'
+  internal:login:headless:
+    desc: Run headless login with GitHub token from environment variable 'TOKEN'
     internal: true
     cmds:
       - echo -e "{{ .LOG_INFO }} GitHub CLI login"
-      - echo -e "{{ .LOG_INFO }} Using  token ..."
-      - echo "{{ .TOKEN }}" | gh auth login --with-token
+      - echo -e "{{ .LOG_INFO }} Using token from TOKEN environment variable ..."
+      - echo "$TOKEN" | gh auth login --with-token
     silent: true
 
   internal:pre:
@@ -145,16 +143,14 @@ tasks:
       - task: internal:cleanup
     silent: true
 
-  run:*:
-    desc: Check GitHub releases for new updates (headless, auth with token)
-    vars:
-      TOKEN: '{{ index .MATCH 0 }}'
+  run:headless:
+    desc: Check GitHub releases for new updates (headless, auth with token from env var)
     summary: >
       Check if new releases are available for the defined repositories
       compared to the last time you ran the task.
-      Authenticate with the provided token.
+      Authenticate with the TOKEN environment variable.
     cmds:
-      - task: internal:login:{{ .TOKEN }}
+      - task: internal:login:headless
       - task: internal:pre
       - for:
           var: REPOSITORIES

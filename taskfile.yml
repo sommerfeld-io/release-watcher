@@ -45,10 +45,3 @@ tasks:
     cmds:
       - for: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links', 'dockerfile', 'devcontainer']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
-
-  # ===============================================================================================
-
-  run:release-watcher:
-    desc: Run the "run" task from components/taskfile.yml
-    cmds:
-      - task -t components/taskfile.yml run

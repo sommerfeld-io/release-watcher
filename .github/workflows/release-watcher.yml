@@ -23,7 +23,9 @@ jobs:
         with:
           version: 3.x
       - name: Run release watcher
-        run: task run:${{ secrets.GITHUB_TOKEN }}
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: TOKEN="$TOKEN" task run:headless
         shell: bash
       - name: Commit and push
         uses: EndBug/add-and-commit@v9.1.4
