@@ -26,9 +26,10 @@ jobs:
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export TASK_X_REMOTE_TASKFILES=1
-          export TOKEN="$TOKEN"
-          task run:headless --yes
+          (
+            cd components || exit 1
+            TOKEN="$TOKEN" task run:headless
+          )
         shell: bash
       - name: Commit and push
         uses: EndBug/add-and-commit@v9.1.4
