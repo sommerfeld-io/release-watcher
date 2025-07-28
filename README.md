@@ -18,15 +18,13 @@ A lightweight tool to fetch the latest release version from GitHub repositories.
 
 Learn about our tagging policy and the difference between rolling tags and immutable tags [on our documentation page⁠](https://github.com/sommerfeld-io/.github/blob/main/docs/tags-and-versions.md).
 
-## Usage
-
-When running release-watcher, you will be asked to log in to GitHub using the GitHub CLI. This is necessary to access the GitHub API without running into rate limits. release-watcher uses the GitHub CLI for the login, so whether credentials are stored in the local cache or not is up to the GitHub CLI.
-
-### How to use with Docker
+## How to use with Docker
 
 You can run the release-watcher in a Docker container. The Docker image is built from the [Dockerfile](components/Dockerfile) in this repository.
 
 The Dockerfile is also [available on Docker Hub as `sommerfeldio/release-watcher`](https://hub.docker.com/r/sommerfeldio/release-watcher).
+
+When running release-watcher, you will be asked to log in to GitHub using the GitHub CLI. This is necessary to access the GitHub API without running into rate limits. release-watcher uses the GitHub CLI for the login, so whether credentials are stored in the local cache or not is up to the GitHub CLI.
 
 Create a `.release-watcher.json` file in the current directory. This file contains the list of repositories to watch. The file should look like this:
 
@@ -57,7 +55,11 @@ To run with Docker directly, run the following command in directory where the `.
 docker run --rm -it --volume ".release-watcher.json:/app/.release-watcher.json" --volume "output:/app/output" sommerfeldio/release-watcher:latest
 ```
 
-### How to use with `task` (from this repsitory)
+## How to use with Docker (headless) in GitHub Actions
+
+:zap: still work in progress ...
+
+## How to use with `task` (from this repsitory)
 
 - Ensure you have [Task](https://taskfile.dev) installed on your system.
 - Ensure you have [GitHub CLI](https://cli.github.com) installed on your system. This tool is mandatory because all GitHub API calls are made using the GitHub CLI.
@@ -65,6 +67,8 @@ docker run --rm -it --volume ".release-watcher.json:/app/.release-watcher.json" 
 - Ensure you have `diff` installed on your system. This tool is used to compare files (in this case the files containing the previous and current versions of the releases). Normally the tool is shipped with Ubuntu.
 
 The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository provides a ready-to-use environment with all necessary tools pre-installed. No additional setup is required other than VSCode with the DevContainer extension.
+
+When running release-watcher, you will be asked to log in to GitHub using the GitHub CLI. This is necessary to access the GitHub API without running into rate limits. release-watcher uses the GitHub CLI for the login, so whether credentials are stored in the local cache or not is up to the GitHub CLI.
 
 - Clone the repository to your local machine.
 
@@ -88,11 +92,7 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
 - This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
 
-### How to use with Docker (headless) in GitHub Actions
-
-:zap: still work in progress ...
-
-### How to use with `task` (headless) in GitHub Actions
+## How to use with `task` (headless) in GitHub Actions
 
 You can provide a GitHub token as a secret in your GitHub repository.
 
