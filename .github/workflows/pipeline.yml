@@ -160,8 +160,8 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           COMMIT_SHA: ${{ github.sha }}
         run: |
-          SRC_IMAGE="$REGISTRY/$DOCKERHUB_USER/$NAME:$COMMIT_SHA"
-          TARGET_IMAGE="$DOCKERHUB_USER/$NAME:$IMAGE_TAG_EDGE"
+          SRC_IMAGE="$REGISTRY/$DOCKERHUB_USER/$IMAGE_NAME:$COMMIT_SHA"
+          TARGET_IMAGE="$DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG_EDGE"
           docker buildx imagetools create --tag "$TARGET_IMAGE" "$SRC_IMAGE"
         shell: bash
 
