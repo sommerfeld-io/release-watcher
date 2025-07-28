@@ -3,7 +3,7 @@ name: "Scheduled: Release Watcher"
 
 on:
   schedule:
-    - cron: '0 1 * * 0'
+    - cron: '30 5 * * 1'
   workflow_dispatch:
 
 permissions:
