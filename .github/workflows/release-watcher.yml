@@ -36,8 +36,9 @@ jobs:
           payload="{
             'text': 'Release Watcher pipeline run: [View Run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})'
           }"
-          curl -X POST -H 'Content-Type: application/json' -d "${payload}" "${{ secrets.GOOGLE_CHAT_WEBHOOK }}"
+          curl -X POST -H 'Content-Type: application/json' -d "${payload}" "${{ vars.GOOGLE_CHAT_WEBHOOK }}"
         env:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
+        shell: bash
