@@ -159,6 +159,7 @@ jobs:
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           COMMIT_SHA: ${{ github.sha }}
+          IMAGE_TAG_EDGE: ${{ vars.IMAGE_TAG_EDGE }}
         run: |
           SRC_IMAGE="$REGISTRY/$DOCKERHUB_USER/$IMAGE_NAME:$COMMIT_SHA"
           TARGET_IMAGE="$DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG_EDGE"
