@@ -39,6 +39,17 @@ tasks:
       - gh auth status || gh auth login
     silent: true
 
+  internal:login:*:
+    desc: Run all login tasks
+    vars:
+      TOKEN: '{{ index .MATCH 0 }}'
+    internal: true
+    cmds:
+      - echo -e "{{ .LOG_INFO }} GitHub CLI login"
+      - echo -e "{{ .LOG_INFO }} Using  token ..."
+      - echo "{{ .TOKEN }}" | gh auth login --with-token
+    silent: true
+
   internal:pre:
     desc: Set of task to run as preparation before the main tasks
     internal: true
@@ -119,8 +130,31 @@ tasks:
     summary: >
       Check if new releases are available for the defined repositories
       compared to the last time you ran the task.
+      Authenticate interactively with the GitHub CLI.
     cmds:
       - task: internal:login
+      - task: internal:pre
+      - for:
+          var: REPOSITORIES
+        task: internal:query-github-releases-api:{{ .ITEM }}
+      - for:
+          var: HELM_CHARTS
+        task: internal:check-helmchart-version:{{ .ITEM }}
+      - task: internal:post
+      - task: internal:compare
+      - task: internal:cleanup
+    silent: true
+
+  run:*:
+    desc: Check GitHub releases for new updates (headless, auth with token)
+    vars:
+      TOKEN: '{{ index .MATCH 0 }}'
+    summary: >
+      Check if new releases are available for the defined repositories
+      compared to the last time you ran the task.
+      Authenticate with the provided token.
+    cmds:
+      - task: internal:login:{{ .TOKEN }}
       - task: internal:pre
       - for:
           var: REPOSITORIES
@@ -141,5 +175,4 @@ tasks:
     cmds:
       - docker compose build
       - docker compose run release-watcher
-      # TODO when gh auth works headless, then replace with `docker compose up`
     silent: true

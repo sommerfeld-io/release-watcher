@@ -83,10 +83,30 @@ The [DevContainer Configuration](.devcontainer/Dockerfile) from this repository 
 
   ```bash
   cd components
-  task run
+  task run # authenticate interactively with GitHub CLI
   ```
 
 - This prints the version information to the console and writes it to a markdown file in the `components/output` directory.
+
+### How to use with Docker (headless) in GitHub Actions
+
+:zap: still work in progress ...
+
+### How to use with `task` (headless) in GitHub Actions
+
+You can provide a GitHub token as a secret in your GitHub repository.
+
+- Clone the repository to your local machine.
+
+- Remember to set up a `.release-watcher.json` file in the `components` directory as described above.
+
+- Run the app with a token
+
+  ```yaml
+  - name: Run release watcher
+    run: task run:${{ secrets.GITHUB_TOKEN }}
+    shell: bash
+  ```
 
 ## :zap: Baseline for Version Comparison
 

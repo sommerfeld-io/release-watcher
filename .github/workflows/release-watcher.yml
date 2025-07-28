@@ -1,0 +1,38 @@
+---
+name: "Scheduled: Release Watcher"
+
+on:
+  schedule:
+    - cron: '0 1 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+
+  release-watcher:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run release watcher
+        run: task run:${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          author_name: sebastian
+          author_email: sebastian@sommerfeld.io
+          message: "chore: update versions with release watcher [Actions Bot]"
+      - name: Notify Google Chat
+        run: |
+          payload="{
+            'text': 'Release Watcher pipeline run: [View Run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})'
+          }"
+          curl -X POST -H 'Content-Type: application/json' -d "${payload}" "${{ secrets.GOOGLE_CHAT_WEBHOOK }}"
+        env:
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
