@@ -51,7 +51,7 @@ services:
     tty: true
 ```
 
-TO run with Docker directly, run the following command in directory where the `.release-watcher.json` file is located:
+To run with Docker directly, run the following command in directory where the `.release-watcher.json` file is located:
 
 ```bash
 docker run --rm -it --volume ".release-watcher.json:/app/.release-watcher.json" --volume "output:/app/output" sommerfeldio/release-watcher:latest
