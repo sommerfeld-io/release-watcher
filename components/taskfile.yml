@@ -115,7 +115,7 @@ tasks:
       - echo
       - echo
       - >
-          diff -u --color \
+          diff -u --color=always \
             --label "Previous Versions ({{ .R }}red{{ .D }})" \
             --label "Current Versions ({{ .G }}green{{ .D }})" \
             {{ .PREVIOUS }} {{ .TARGET }} || true
