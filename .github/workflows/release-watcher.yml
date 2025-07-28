@@ -18,6 +18,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install Task
+        uses: arduino/setup-task@v2.0.0
+        with:
+          version: 3.x
       - name: Run release watcher
         run: task run:${{ secrets.GITHUB_TOKEN }}
         shell: bash
