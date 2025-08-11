@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
@@ -44,7 +44,7 @@ jobs:
         linter: ['yaml', 'workflows', 'filenames', 'folders', 'markdown-links', 'dockerfile']
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Login to Container Registry
         uses: docker/login-action@v3
         with:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Mandatory files should exist
         uses: chrisreddington/validate-file-exists@v0.0.8
         with:
@@ -88,7 +88,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Container Registry
@@ -179,7 +179,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{github.ref}}
       - name: Info - package.json
@@ -235,7 +235,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Remove ${{ env.IMAGE_NAME }}:${{ github.sha }} images from registry
         env:
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
