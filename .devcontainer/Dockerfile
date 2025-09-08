@@ -1,4 +1,4 @@
-FROM sommerfeldio/devcontainer:0.10.4
+FROM sommerfeldio/devcontainer:0.11.0
 LABEL maintainer="sebastian@sommerfeld.io"
 
 ARG USER=vscode
